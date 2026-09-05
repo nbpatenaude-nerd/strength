@@ -108,8 +108,9 @@ USER journey
 
 # Note: unsetting DJANGO_SETTINGS_MODULE here since we only need django to
 #        compile the message files
-RUN --mount=type=bind,from=builder,source=/wheels,target=/wheels \
-    pip3 install --break-system-packages --no-cache-dir --user /wheels/* \
+COPY --chown=journey:journey --from=builder /wheels /home/journey/wheels
+RUN pip3 install --break-system-packages --no-cache-dir --user /home/journey/wheels/* \
+    && rm -rf /home/journey/wheels \
     && pip3 install --break-system-packages --user . \
     && mkdir -p ~/media ~/static ~/beat ~/db \
     && cd wger \
