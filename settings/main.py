@@ -63,11 +63,13 @@ if os.environ.get('DJANGO_ADMINS'):
 
 if os.environ.get('PS_DATABASE_URI'):
     DATABASES = {'default': env.db_url('PS_DATABASE_URI')}
+elif os.environ.get('DATABASE_URL'):
+    DATABASES = {'default': env.db_url('DATABASE_URL')}
 else:
     DATABASES = {
         'default': {
-            'ENGINE': env.str('DJANGO_DB_ENGINE'),
-            'NAME': env.str('DJANGO_DB_DATABASE'),
+            'ENGINE': env.str('DJANGO_DB_ENGINE', 'django.db.backends.sqlite3'),
+            'NAME': env.str('DJANGO_DB_DATABASE', '/home/wger/db/database.sqlite'),
             'USER': env.str('DJANGO_DB_USER', ''),
             'PASSWORD': env.str('DJANGO_DB_PASSWORD', ''),
             'HOST': env.str('DJANGO_DB_HOST', ''),
@@ -170,7 +172,7 @@ if env.bool('ENABLE_EMAIL', False):
     EMAIL_TIMEOUT = 60
 
 # Sender address used for sent emails
-DEFAULT_FROM_EMAIL = env.str('FROM_EMAIL', 'wger Workout Manager <wger@example.com>')
+DEFAULT_FROM_EMAIL = env.str('FROM_EMAIL', 'Journey Endurance Strength <noreply@journeyendurance.com>')
 WGER_SETTINGS['EMAIL_FROM'] = DEFAULT_FROM_EMAIL
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 EMAIL_FROM_ADDRESS = DEFAULT_FROM_EMAIL
@@ -303,7 +305,16 @@ CSRF_TRUSTED_ORIGINS = env.list(
     default=['http://127.0.0.1', 'http://localhost', 'https://localhost'],
 )
 
-if env.bool('X_FORWARDED_PROTO_HEADER_SET', False):
+if os.environ.get('RAILWAY_PUBLIC_DOMAIN'):
+    _r_domain = os.environ.get('RAILWAY_PUBLIC_DOMAIN')
+    CSRF_TRUSTED_ORIGINS.extend([f'https://{_r_domain}', f'http://{_r_domain}'])
+
+if os.environ.get('SITE_URL'):
+    _s_url = os.environ.get('SITE_URL')
+    if _s_url not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(_s_url)
+
+if env.bool('X_FORWARDED_PROTO_HEADER_SET', 'RAILWAY_ENVIRONMENT' in os.environ):
     SECURE_PROXY_SSL_HEADER = (
         env.str('SECURE_PROXY_SSL_HEADER', 'HTTP_X_FORWARDED_PROTO'),
         'https',
@@ -312,15 +323,16 @@ if env.bool('X_FORWARDED_PROTO_HEADER_SET', False):
 # Build absolute URLs (e.g. OAuth redirect URIs) from the X-Forwarded-Host
 # header instead of the Host header. Only enable this behind a reverse proxy
 # that sets the header, as it is otherwise attacker-controlled.
-USE_X_FORWARDED_HOST = env.bool('USE_X_FORWARDED_HOST', False)
+USE_X_FORWARDED_HOST = env.bool('USE_X_FORWARDED_HOST', 'RAILWAY_ENVIRONMENT' in os.environ)
 
 REST_FRAMEWORK['NUM_PROXIES'] = env.int('NUMBER_OF_PROXIES', 1)
 
 #
 # Celery message queue configuration
 #
-CELERY_BROKER_URL = env.str('CELERY_BROKER', 'redis://cache:6379/2')
-CELERY_RESULT_BACKEND = env.str('CELERY_BACKEND', 'redis://cache:6379/2')
+_redis_default = env.str('REDIS_URL', 'redis://cache:6379/2')
+CELERY_BROKER_URL = env.str('CELERY_BROKER', _redis_default)
+CELERY_RESULT_BACKEND = env.str('CELERY_BACKEND', _redis_default)
 
 #
 # Prometheus metrics

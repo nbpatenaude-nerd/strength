@@ -77,7 +77,8 @@ fi
 python3 manage.py set-site-url
 
 # Run the server
-PORT="${WGER_PORT:-8000}"
+PORT="${WGER_PORT:-${PORT:-8000}}"
+WGER_USE_GUNICORN="${WGER_USE_GUNICORN:-True}"
 if [[ "$WGER_USE_GUNICORN" == "True" ]];
 then
     echo "Using gunicorn on port $PORT..."
