@@ -6,13 +6,13 @@
 {#           #}
 {% block opengraph %}
     {{ block.super }}
-    <meta property="og:title" content="{% translate 'Features' %} - wger">
+    <meta property="og:title" content="{% translate 'Features' %} - Journey Endurance Strength">
     <meta property="og:description"
-          content="{% blocktranslate %}wger Workout Manager is a free, open source web application that manages your exercises and workouts.{% endblocktranslate %}">
+          content="{% blocktranslate %}Journey Endurance Strength is a free, open source web application that manages your exercises and workouts.{% endblocktranslate %}">
 {% endblock %}
 
 {% block opengraphimages %}
-    <meta property="og:image" content="{% static 'images/logos/logo-font.svg' %}">
+    <meta property="og:image" content="{% static 'images/logos/journey/logo_with_text.png' %}">
 {% endblock %}
 
 
@@ -27,7 +27,7 @@
         <nav class="navbar navbar-expand-lg px-4">
             <div class="container-xl">
                 <a class="navbar-brand" href="{% url 'core:index' %}">
-                    <img src="{% static 'images/logos/logo-font.svg' %}" alt="wger logo"/>
+                    <img src="{% static 'images/logos/journey/logo_with_text_horizontal.png' %}" alt="Journey Endurance Strength logo" style="height: 44px; width: auto;"/>
                 </a>
                 <button class="navbar-toggler"
                         type="button"
@@ -112,7 +112,7 @@
                         {% translate "Track your <br> way to your <br> ideal body" %}
                     </h1>
                     <p>
-                        {% translate "Join wger, the community-driven <b>free and open-source fitness tracker</b>" %}
+                        {% translate "Join Journey Endurance Strength, the <b>free and open-source fitness tracker</b>" %}
                     </p>
 
                     <a role="button"
@@ -132,7 +132,7 @@
             <section class="row">
                 <div class="col-6 col-md-3 d-flex flex-column align-items-center">
                     <h2 class="display-3 font-bebas-neue text-dark-blue mb-0">{{ nr_users }}+</h2>
-                    <p class="text-center">{% translate "people <br> using wger" %}</p>
+                    <p class="text-center">{% translate "people <br> using Journey Endurance Strength" %}</p>
                 </div>
                 <div class="col-6 col-md-3 d-flex flex-column align-items-center">
                     <h2 class="display-3 font-bebas-neue text-dark-blue mb-0">{{ nr_exercises }}+</h2>
@@ -163,7 +163,7 @@
                         <picture>
                             <source srcset="{% static 'images/screens-1.avif' %}" type="image/avif">
                             <img src="{% static 'images/screens-1.png' %}"
-                                 alt="mobile screen showing wger feature"
+                                 alt="mobile screen"
                                  class="img-fluid"
                                  loading="lazy">
                         </picture>
@@ -202,7 +202,7 @@
                         <picture>
                             <source srcset="{% static 'images/screens-2.avif' %}" type="image/avif">
                             <img src="{% static 'images/screens-2.png' %}"
-                                 alt="mobile screen showing wger feature"
+                                 alt="mobile screen"
                                  class="img-fluid"
                                  loading="lazy">
                         </picture>
@@ -242,7 +242,7 @@
                         <picture>
                             <source srcset="{% static 'images/screens-3.avif' %}" type="image/avif">
                             <img src="{% static 'images/screens-3.png' %}"
-                                 alt="mobile screen showing wger feature"
+                                 alt="mobile screen"
                                  class="img-fluid"
                                  loading="lazy">
                         </picture>
@@ -286,7 +286,7 @@
                     {% else %}
                         {% url 'core:index' %}
                     {% endif %}">
-                {% translate "Try wger now" %}
+                {% translate "Try Journey Endurance Strength now" %}
             </a>
         </div>
 
@@ -311,7 +311,7 @@
                         </h1>
                         <p style="line-height: 30px;">
                             {% blocktranslate trimmed %}
-                                wger is funded and created by the open-source community: people like
+                                Journey Endurance Strength was created for you: people like
                                 you translating, adding exercises and nutritional info, developing,
                                 and more.
                             {% endblocktranslate %}
@@ -322,7 +322,7 @@
                                 {% endblocktranslate %}
                             </b>
                             {% blocktranslate trimmed %}
-                                Pitch in and help make wger even better!
+                                Help make Journey Endurance Strength even better!
                             {% endblocktranslate %}
                         </p>
                         <div class="d-grid gap-2 d-md-block">
@@ -386,7 +386,7 @@
                         </h6>
                         <p class="text-light fw-lighter text-center">
                             {% blocktranslate trimmed %}
-                                Don't want your data on an online service? Set up a wger instance
+                                Don't want your data on an online service? Set up an instance
                                 on your own server for free!
                             {% endblocktranslate %}
                         </p>
@@ -402,7 +402,7 @@
                             {% translate "Integrate with your own app" %}
                         </h6>
                         <p class="text-light fw-lighter text-center">
-                            {% translate "wger offers an open API that you can use for your app." %}
+                            {% translate "Journey Endurance Strength offers an open API." %}
                         </p>
                     </div>
                     <div
@@ -431,7 +431,7 @@
     <footer class="d-grid gap-3 p-5 footer-bg">
         <div class="container-xl">
             <div class="d-flex pb-4">
-                <img src="{% static 'images/logos/logo-font-inverse.svg' %}" alt="wger logo"/>
+                <img src="{% static 'images/logos/journey/logo_with_text_horizontal.png' %}" alt="Journey Endurance Strength logo" style="height: 44px; width: auto;"/>
             </div>
             <div class="row row-cols-lg-4 row-cols-sm-1 g-2 border-bottom border-light pb-3">
                 <div class="col-lg-3 col-sm-6 col-12">

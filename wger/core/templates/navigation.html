@@ -4,7 +4,7 @@
         <div class="container-lg" style="display: flex;">
             <a class="navbar-brand" href="{% url 'core:index' %}">
                 <img src="{% static 'images/logos/logo-bg-white.png' %}" style="width: 38px;"
-                     alt="wger logo">
+                     alt="Journey Endurance Strength logo">
             </a>
             <button class="navbar-toggler"
                     type="button"
@@ -220,37 +220,9 @@
                                     {% translate "Support & Get Involved" %}
                                 </a>
                             </li>
-                            <li class="dropdown-divider"></li>
                             <li>
                                 <a class="dropdown-item"
                                    href="{% url 'software:api' %}">{% translate "REST API" %}</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item"
-                                   href="https://github.com/wger-project/wger/blob/master/LICENSE.txt">
-                                    <span class="{% fa_class 'external-link-alt' %}"></span>
-                                    {% translate "License" %}
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="https://wger.readthedocs.io/">
-                                    <span class="{% fa_class 'external-link-alt' %}"></span>
-                                    {% translate "Developer documentation" %}
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item"
-                                   href="https://github.com/wger-project/wger">
-                                    <span class="{% fa_class 'external-link-alt' %}"></span>
-                                    {% translate "Get the code" %} (Github)
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item"
-                                   href="https://hosted.weblate.org/engage/wger/">
-                                    <span class="{% fa_class 'external-link-alt' %}"></span>
-                                    {% translate "Translate" %}
-                                </a>
                             </li>
                         </ul>
                     </li>

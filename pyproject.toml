@@ -6,9 +6,9 @@ build-backend = "hatchling.build"
 name = "wger"
 dynamic = ["version", ]
 authors = [
-    { name = "wger team", email = "hello@wger.de" },
+    { name = "Journey Endurance", email = "info@journeyendurance.com" },
 ]
-description = "FLOSS workout, fitness and weight manager/tracker"
+description = "Journey Endurance Strength training & Meal tracking app"
 readme = "README.md"
 requires-python = ">=3.12"
 license = "AGPL-3.0-or-later"
