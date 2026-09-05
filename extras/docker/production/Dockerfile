@@ -71,36 +71,40 @@ RUN npm ci --production \
 # Final
 ########
 FROM wger/base:latest AS final
-LABEL org.opencontainers.image.authors="wger team <hello@wger.de>"
+LABEL org.opencontainers.image.authors="Journey Endurance <info@journeyendurance.com>"
 ARG DOCKER_DIR=./extras/docker/production
 ARG BUILD_COMMIT
 ARG BUILD_DATE
 
-ENV PATH="/home/wger/.local/bin:$PATH"
+# Migrate user and home directory to journey
+RUN usermod -l journey -d /home/journey -m wger \
+    && groupmod -n journey wger
+
+ENV PATH="/home/journey/.local/bin:$PATH"
 ENV APP_BUILD_COMMIT=$BUILD_COMMIT
 ENV APP_BUILD_DATE=$BUILD_DATE
-ENV PYTHONPATH=/home/wger/src
+ENV PYTHONPATH=/home/journey/src
 ENV DJANGO_SETTINGS_MODULE=settings.main
 
-WORKDIR /home/wger/src
+WORKDIR /home/journey/src
 EXPOSE 8000
 
 # Set up the application
-COPY --chown=wger:wger . /home/wger/src
-COPY --chown=wger:wger --from=builder /root/src/node_modules /home/wger/src/node_modules
-COPY --chown=wger:wger --from=builder /root/src/wger/core/static/bootstrap-compiled.css /home/wger/src/wger/core/static/bootstrap-compiled.css
-COPY --chown=wger:wger --from=builder /root/src/wger/core/static/bootstrap-compiled.css.map /home/wger/src/wger/core/static/bootstrap-compiled.css.map
-COPY ${DOCKER_DIR}/entrypoint.sh /home/wger/entrypoint.sh
+COPY --chown=journey:journey . /home/journey/src
+COPY --chown=journey:journey --from=builder /root/src/node_modules /home/journey/src/node_modules
+COPY --chown=journey:journey --from=builder /root/src/wger/core/static/bootstrap-compiled.css /home/journey/src/wger/core/static/bootstrap-compiled.css
+COPY --chown=journey:journey --from=builder /root/src/wger/core/static/bootstrap-compiled.css.map /home/journey/src/wger/core/static/bootstrap-compiled.css.map
+COPY ${DOCKER_DIR}/entrypoint.sh /home/journey/entrypoint.sh
 COPY ${DOCKER_DIR}/celery/start-beat /start-beat
 COPY ${DOCKER_DIR}/celery/start-worker /start-worker
 COPY ${DOCKER_DIR}/celery/start-flower /start-flower
-RUN chmod +x /home/wger/entrypoint.sh \
+RUN chmod +x /home/journey/entrypoint.sh \
     && chmod +x /start-beat \
     && chmod +x /start-worker \
     && chmod +x /start-flower \
-    && chown wger:wger /home/wger/src
+    && chown journey:journey /home/journey/src
 
-USER wger
+USER journey
 
 # Note: unsetting DJANGO_SETTINGS_MODULE here since we only need django to
 #        compile the message files
@@ -111,4 +115,4 @@ RUN --mount=type=bind,from=builder,source=/wheels,target=/wheels \
     && cd wger \
     && env -u DJANGO_SETTINGS_MODULE django-admin compilemessages
 
-CMD ["/home/wger/entrypoint.sh"]
+CMD ["/home/journey/entrypoint.sh"]

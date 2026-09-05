@@ -69,7 +69,7 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': env.str('DJANGO_DB_ENGINE', 'django.db.backends.sqlite3'),
-            'NAME': env.str('DJANGO_DB_DATABASE', '/home/wger/db/database.sqlite'),
+            'NAME': env.str('DJANGO_DB_DATABASE', '/home/journey/db/database.sqlite'),
             'USER': env.str('DJANGO_DB_USER', ''),
             'PASSWORD': env.str('DJANGO_DB_PASSWORD', ''),
             'HOST': env.str('DJANGO_DB_HOST', ''),
@@ -141,8 +141,8 @@ SITE_URL = env.str('SITE_URL', 'http://localhost:8000')
 
 # Path to uploaded files
 # Absolute filesystem path to the directory that will hold user-uploaded files.
-MEDIA_ROOT = env.str('DJANGO_MEDIA_ROOT', '/home/wger/media')
-STATIC_ROOT = env.str('DJANGO_STATIC_ROOT', '/home/wger/static')
+MEDIA_ROOT = env.str('DJANGO_MEDIA_ROOT', '/home/journey/media')
+STATIC_ROOT = env.str('DJANGO_STATIC_ROOT', '/home/journey/static')
 
 # If you change these, adjust nginx alias definitions as well
 MEDIA_URL = env.str('MEDIA_URL', '/media/')

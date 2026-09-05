@@ -49,6 +49,9 @@ coverage.xml
 settings/*_extra.py
 *.sqlite
 /CACHE
+.env
+.env.*
+!.env.example
 
 
 # Sphinx documentation
