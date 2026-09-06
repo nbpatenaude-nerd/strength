@@ -478,3 +478,43 @@ def upload_powersync_data(request):
     if result is not None:
         return JsonResponse(result, status=200)
     return JsonResponse({'status': 'ok!'}, status=200)
+
+from rest_framework.views import APIView
+from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
+from wger.core.models import UserProfile
+from rest_framework import status
+from rest_framework.permissions import IsAdminUser
+
+class ProvisionUserView(APIView):
+    """
+    Creates a new user and returns their long-lived API token.
+    Requires Admin privileges to execute.
+    """
+    permission_classes = (IsAdminUser,)
+
+    def post(self, request):
+        username = request.data.get('username')
+        email = request.data.get('email', '')
+        password = request.data.get('password')
+
+        if not username or not password:
+            return Response({'error': 'username and password are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if User.objects.filter(username=username).exists():
+            return Response({'error': 'User already exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Create user
+        user = User.objects.create_user(username=username, email=email, password=password)
+        
+        # Profile is typically created by signals in wger, but ensure it exists
+        UserProfile.objects.get_or_create(user=user)
+
+        # Generate Token
+        token, _ = Token.objects.get_or_create(user=user)
+
+        return Response({
+            'user_id': user.id,
+            'username': user.username,
+            'token': token.key
+        }, status=status.HTTP_201_CREATED)

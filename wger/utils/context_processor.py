@@ -35,6 +35,7 @@ def processor(request):
         'mastodon': settings.WGER_SETTINGS.get('MASTODON', ''),
         'allow_registration': settings.WGER_SETTINGS.get('ALLOW_REGISTRATION', False),
         'show_app_store_links': settings.WGER_SHOW_APP_STORE_LINKS,
+        'journey_endurance_app_url': getattr(settings, 'JOURNEY_ENDURANCE_APP_URL', 'https://app.coachwatts.com'),
 
         # Languages
         'i18n_language': get_language_data(

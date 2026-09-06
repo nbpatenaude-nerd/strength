@@ -23,3 +23,4 @@ class CoreConfig(AppConfig):
     def ready(self):
         import wger.core.checks  # noqa: F401
         import wger.core.signals  # noqa: F401
+        import wger.core.webhooks  # noqa: F401
