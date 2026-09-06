@@ -191,3 +191,25 @@ class TimezoneMiddleware:
             timezone.deactivate()
 
         return self.get_response(request)
+
+
+class EmbedMiddleware:
+    """
+    Middleware to support embedding the app in an iframe via ?embedded=1.
+    Sets a session variable to hide navigation and adds CSP headers.
+    """
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if request.GET.get('embedded') == '1':
+            request.session['is_embedded'] = True
+        elif request.GET.get('embedded') == '0':
+            request.session['is_embedded'] = False
+
+        response = self.get_response(request)
+        
+        # Allow embedding in specific Coach app domains
+        # (Using * here for the POC, you can tighten it to specific domains like http://localhost:3099 https://app.coachwatts.com)
+        response['Content-Security-Policy'] = "frame-ancestors *;"
+        return response

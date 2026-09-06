@@ -173,7 +173,7 @@ MIDDLEWARE = [
     # Send an appropriate Header so search engines don't index pages
     'wger.utils.middleware.RobotsExclusionMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'wger.core.middleware.EmbedMiddleware',
     'django.middleware.locale.LocaleMiddleware',
 
     # allauth
