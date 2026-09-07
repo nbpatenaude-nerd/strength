@@ -635,3 +635,38 @@ class MaxRiRConfigViewSet(AbstractConfigViewSet):
             return MaxRiRConfig.objects.none()
 
         return MaxRiRConfig.objects.filter(slot_entry__slot__day__routine__user=self.request.user)
+
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def brzycki_estimates(request):
+    """
+    Returns estimated loads for 1-20 reps using the Brzycki equation.
+    Expects ?exercise_id=XYZ and ?weight=XYZ & ?reps=XYZ as fallback or inputs.
+    """
+    try:
+        weight = float(request.query_params.get('weight', 0))
+        reps = int(request.query_params.get('reps', 1))
+    except ValueError:
+        return Response({"error": "Invalid weight or reps"}, status=400)
+        
+    if reps <= 0 or weight <= 0:
+        return Response({"error": "Weight and reps must be positive"}, status=400)
+        
+    # Calculate 1RM using Brzycki: 1RM = w / (1.0278 - 0.0278 * r)
+    # Note: Brzycki is typically reliable up to ~10-12 reps, but we can extrapolate to 20 as requested
+    one_rm = weight / (1.0278 - (0.0278 * reps))
+    
+    estimates = {}
+    for r in range(1, 21):
+        # Reverse Brzycki: expected_weight = 1RM * (1.0278 - 0.0278 * r)
+        est = one_rm * (1.0278 - (0.0278 * r))
+        estimates[str(r)] = round(max(0, est), 2)
+        
+    return Response({
+        "1rm": round(one_rm, 2),
+        "estimates": estimates
+    })

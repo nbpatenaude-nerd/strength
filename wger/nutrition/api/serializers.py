@@ -396,3 +396,21 @@ class NutritionPlanInfoSerializer(serializers.ModelSerializer):
             'goal_fiber',
             'meals',
         )
+
+from wger.nutrition.models import Recipe, RecipeIngredient
+
+class RecipeIngredientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecipeIngredient
+        fields = ['id', 'ingredient', 'amount', 'unit']
+
+class RecipeSerializer(serializers.ModelSerializer):
+    ingredients = RecipeIngredientSerializer(many=True, read_only=True)
+    
+    class Meta:
+        model = Recipe
+        fields = ['id', 'name', 'created_at', 'ingredients']
+
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)

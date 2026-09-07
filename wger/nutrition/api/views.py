@@ -485,3 +485,63 @@ class LogItemViewSet(WgerOwnerObjectModelViewSet):
         """
         serializer = NutritionalValuesSerializer(self.get_object().get_nutritional_values())
         return Response(serializer.data)
+
+from wger.nutrition.models import Recipe, RecipeIngredient
+from wger.nutrition.api.serializers import RecipeSerializer, RecipeIngredientSerializer
+from rest_framework import viewsets
+
+class RecipeViewSet(viewsets.ModelViewSet):
+    serializer_class = RecipeSerializer
+    
+    def get_queryset(self):
+        return Recipe.objects.filter(user=self.request.user)
+
+class RecipeIngredientViewSet(viewsets.ModelViewSet):
+    serializer_class = RecipeIngredientSerializer
+    
+    def get_queryset(self):
+        return RecipeIngredient.objects.filter(recipe__user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework import status
+import datetime
+from wger.nutrition.models import LogItem
+
+from django.shortcuts import get_object_or_404
+class BulkMealPrepView(viewsets.ViewSet):
+    """
+    API endpoint for adding a recipe to multiple days.
+    """
+    @action(detail=False, methods=['post'])
+    def bulk_add_recipe(self, request):
+        recipe_id = request.data.get('recipe_id')
+        dates = request.data.get('dates', []) # e.g. ["2026-09-08", "2026-09-09"]
+        
+        if not recipe_id or not dates:
+            return Response({"error": "recipe_id and dates are required"}, status=status.HTTP_400_BAD_REQUEST)
+            
+        recipe = get_object_or_404(Recipe, pk=recipe_id, user=request.user)
+        
+        # Add all ingredients from the recipe to the specified days
+        created_logs = []
+        for date_str in dates:
+            try:
+                target_date = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
+            except ValueError:
+                continue
+                
+            for ri in recipe.ingredients.all():
+                log = LogItem.objects.create(
+                    user=request.user,
+                    date=target_date,
+                    ingredient=ri.ingredient,
+                    amount=ri.amount,
+                    unit=ri.unit
+                )
+                created_logs.append(log.id)
+                
+        return Response({"success": True, "created_logs": created_logs})

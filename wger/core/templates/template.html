@@ -126,75 +126,8 @@
 
 {% if not request.session.is_embedded %}
 <footer id="main-footer" class="bg-light border-top">
-    <div class="container bg-wger-light">
-        <div class="row">
-            <div class="col-xl-4 col-md-7 mt-2">
-            </div>
-            <div class="col-xl-6 col-md-3">
-                <ul class="list-unstyled mb-0 pt-2">
-                    <li>
-                        <a href="{% url 'core:imprint' %}" class="text-muted small">
-                            {% translate "Imprint" %}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'software:tos' %}" class="text-muted small">
-                            {% translate "Terms of service" %}
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-            {#                                         #}
-            {# Render the links to the other languages #}
-            {#                                         #}
-            <div class="col-md-2">
-                {% if not is_api_path %}
-                    {# Don't show language switcher in the generated API views #}
-                    <div class="btn-group dropup">
-                        <button class="btn btn-light dropdown-toggle"
-                                type="button"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                            <span class="{% fa_class 'globe' %}"></span>
-                            {% translate i18n_language.name %}
-                            <span class="caret"></span>
-                        </button>
-
-                        <ul class="dropdown-menu language-menu" aria-labelledby="btnGroupLanguages">
-                            <li>
-                                <a class="dropdown-item" href="{% url 'core:language:browser_language' %}?next={{ request.path }}">
-                                    <span class="{% fa_class 'globe' %}"></span>
-                                    <span>{% translate "Browser language" %}</span>
-                                </a>
-                            </li>
-
-                            <form id="language-form" action="{% url 'set_language' %}" method="post">
-                                {% csrf_token %}
-                                <input name="next" type="hidden" value="{{ redirect_to }}">
-                                <input type="hidden" name="language" id="language-input">
-                                {% for language in languages %}
-                                    {% language_select language %}
-                                {% endfor %}
-                            </form>
-
-                            <li>
-                                <hr class="dropdown-divider"></hr>
-                            </li>
-                            <li>
-                                <a href="https://hosted.weblate.org/engage/wger/"
-                                   class="dropdown-item"
-                                   target="_blank">
-                                    <span class="{% fa_class 'plus' %}"></span>
-                                    {% translate "Translate" %}
-                                </a>
-                            </li>
-                        </ul>
-
-                    </div>
-                {% endif %}
-            </div>
-        </div>
+    <div class="container bg-wger-light text-center py-3">
+        <span class="text-muted small">&copy; Journey Endurance Strength</span>
     </div>
 </footer>
 {% endif %}

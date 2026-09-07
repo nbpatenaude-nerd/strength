@@ -230,6 +230,9 @@ router.register(
 router.register(r'nutritiondiary', nutrition_api_views.LogItemViewSet, basename='nutritiondiary')
 router.register(r'meal', nutrition_api_views.MealViewSet, basename='meal')
 router.register(r'mealitem', nutrition_api_views.MealItemViewSet, basename='mealitem')
+router.register(r'recipe', nutrition_api_views.RecipeViewSet, basename='recipe')
+router.register(r'recipeingredient', nutrition_api_views.RecipeIngredientViewSet, basename='recipeingredient')
+router.register(r'mealprep', nutrition_api_views.BulkMealPrepView, basename='mealprep')
 router.register(r'ingredient-image', nutrition_api_views.ImageViewSet, basename='ingredientimage')
 
 # Weight app
@@ -328,6 +331,7 @@ urlpatterns += [
         name='userprofile-verify-email',
     ),
     path('api/v2/magic-login/', core_api_views.MagicLoginView.as_view(), name='magic-login'),
+    path('api/v2/brzycki/', manager_api_views.brzycki_estimates, name='brzycki-estimates'),
     path('api/v2/provision/', core_api_views.ProvisionUserView.as_view(), name='provision-user'),
     path('api/v2/', include(router.urls)),
     path('api/v2/token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
