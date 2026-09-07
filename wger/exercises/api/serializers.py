@@ -126,12 +126,14 @@ class ExerciseSerializer(serializers.ModelSerializer):
     """
     Exercise serializer
     """
+    name = serializers.SerializerMethodField()
 
     class Meta:
         model = Exercise
         fields = (
             'id',
             'uuid',
+            'name',
             'created',
             'last_update',
             'category',
@@ -144,6 +146,10 @@ class ExerciseSerializer(serializers.ModelSerializer):
             'movement_pattern',
             'license_author',
         )
+
+    def get_name(self, obj):
+        translation = obj.get_translation()
+        return translation.name if translation else ''
 
 
 class EquipmentSerializer(serializers.ModelSerializer):
