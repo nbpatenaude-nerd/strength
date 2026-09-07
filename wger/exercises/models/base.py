@@ -143,6 +143,27 @@ class Exercise(AbstractLicenseModel, AbstractHistoryMixin, models.Model):
     )
     """Exercises with the same variation_group UUID belong together"""
 
+    video_url = models.URLField(
+        verbose_name='Video URL',
+        max_length=2000,
+        blank=True,
+        null=True,
+    )
+    
+    intent = models.CharField(
+        verbose_name='Intent',
+        max_length=255,
+        blank=True,
+        null=True,
+    )
+    
+    movement_pattern = models.CharField(
+        verbose_name='Movement Pattern',
+        max_length=255,
+        blank=True,
+        null=True,
+    )
+
     created = models.DateTimeField(
         'Creation date',
         auto_now_add=True,

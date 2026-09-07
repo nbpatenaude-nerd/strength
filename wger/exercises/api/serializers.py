@@ -139,6 +139,9 @@ class ExerciseSerializer(serializers.ModelSerializer):
             'muscles_secondary',
             'equipment',
             'variation_group',
+            'video_url',
+            'intent',
+            'movement_pattern',
             'license_author',
         )
 
@@ -662,8 +665,13 @@ class ExerciseInfoSerializer(serializers.ModelSerializer):
             'images',
             'translations',
             'variation_group',
+            'video_url',
+            'intent',
+            'movement_pattern',
             'images',
             'videos',
+            'authors',
+            'notes',
             'author_history',
             'total_authors_history',
         )
@@ -739,6 +747,9 @@ class ExerciseSubmissionSerializer(serializers.ModelSerializer):
             'muscles_secondary',
             'equipment',
             'variation_group',
+            'video_url',
+            'intent',
+            'movement_pattern',
             'variations_connect_to',
             'license',
             'license_author',
@@ -780,6 +791,9 @@ class ExerciseSubmissionSerializer(serializers.ModelSerializer):
             license=validated_data.pop('license'),
             license_author=validated_data.pop('license_author'),
             variation_group=validated_data.pop('variation_group', None),
+            video_url=validated_data.pop('video_url', None),
+            intent=validated_data.pop('intent', None),
+            movement_pattern=validated_data.pop('movement_pattern', None),
         )
         exercise.muscles.set(validated_data.pop('muscles'))
         exercise.muscles_secondary.set(validated_data.pop('muscles_secondary'))
