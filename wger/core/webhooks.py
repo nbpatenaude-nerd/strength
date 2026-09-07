@@ -43,14 +43,33 @@ def workout_session_webhook(sender, instance, created, **kwargs):
     }
     run_webhook_in_background(payload)
 
-@receiver(post_save, sender=LogItem)
-def nutrition_log_webhook(sender, instance, created, **kwargs):
+from django.db.models.signals import post_save, post_delete
+from wger.nutrition.helpers import NutritionalValues
+
+def _dispatch_nutrition_log(instance):
+    user = instance.user
+    date = instance.date
+    
+    logs = LogItem.objects.filter(user=user, date=date)
+    daily_values = NutritionalValues()
+    for log in logs:
+        daily_values += log.get_nutritional_values()
+        
     payload = {
-        "event": "nutrition_log_saved",
-        "user_id": instance.user.id,
-        "log_id": instance.id,
-        "date": str(instance.date),
-        "amount": float(instance.amount) if instance.amount else 0,
-        "ingredient_id": instance.ingredient.id if instance.ingredient else None
+        "event": "nutrition_daily_macros_updated",
+        "user_id": user.id,
+        "date": str(date),
+        "total_energy": float(daily_values.energy),
+        "total_protein": float(daily_values.protein),
+        "total_carbohydrates": float(daily_values.carbohydrates),
+        "total_fat": float(daily_values.fat),
     }
     run_webhook_in_background(payload)
+
+@receiver(post_save, sender=LogItem)
+def nutrition_log_webhook_save(sender, instance, created, **kwargs):
+    _dispatch_nutrition_log(instance)
+
+@receiver(post_delete, sender=LogItem)
+def nutrition_log_webhook_delete(sender, instance, **kwargs):
+    _dispatch_nutrition_log(instance)
