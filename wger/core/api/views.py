@@ -518,3 +518,26 @@ class ProvisionUserView(APIView):
             'username': user.username,
             'token': token.key
         }, status=status.HTTP_201_CREATED)
+
+from django.contrib.auth import login
+from django.shortcuts import redirect
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
+
+class MagicLoginView(APIView):
+    """
+    Seamless Magic Login Endpoint for Hub-and-Spoke architecture.
+    """
+    permission_classes = [AllowAny]
+    
+    def get(self, request, *args, **kwargs):
+        token_key = request.query_params.get('token')
+        if not token_key:
+            return redirect('/login?error=invalid_magic_link')
+            
+        try:
+            token = Token.objects.select_related('user').get(key=token_key)
+            login(request, token.user, backend='django.contrib.auth.backends.ModelBackend')
+            return redirect('/')
+        except Token.DoesNotExist:
+            return redirect('/login?error=invalid_magic_link')

@@ -327,6 +327,7 @@ urlpatterns += [
         core_api_views.VerifyEmailView.as_view(),
         name='userprofile-verify-email',
     ),
+    path('api/v2/magic-login/', core_api_views.MagicLoginView.as_view(), name='magic-login'),
     path('api/v2/provision/', core_api_views.ProvisionUserView.as_view(), name='provision-user'),
     path('api/v2/', include(router.urls)),
     path('api/v2/token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
